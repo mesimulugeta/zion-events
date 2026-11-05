@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>Confirm Reservation</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <style>
+
+        body{
+            background-color:#e6f7f9;
+            font-family:'Montserrat',sans-serif;
+        }
+
+        .container-box{
+            max-width:700px;
+            margin:60px auto;
+            background:#fff;
+            padding:30px;
+            border-radius:12px;
+            box-shadow:0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-custom{
+            background:linear-gradient(135deg,#00acc1,#007c8a);
+            color:white;
+            border-radius:20px;
+            border:none;
+            padding:10px 20px;
+        }
+
+        .btn-custom:hover{
+            background:linear-gradient(135deg,#0097a7,#006064);
+        }
+
+        ul{
+            padding-left:20px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container-box">
+
+    <h3 class="mb-4">✅ Confirm Your Reservation</h3>
+
+    <p>
+        <strong>🎤 Event:</strong>
+        <span th:text="${event.title}"></span>
+    </p>
+
+    <p>
+        <strong>📅 Start:</strong>
+        <span th:text="${event.startAt}"></span>
+    </p>
+
+    <p>
+        <strong>📧 Your Email:</strong>
+        <span th:text="${customerEmail}"></span>
+    </p>
+
+    <p><strong>🪑 Selected Seats:</strong></p>
+
+    <ul>
+        <li th:each="seatId : ${seatIds}"
+            th:text="'Seat ' + ${seatId}">
+        </li>
+    </ul>
+
+    <form th:action="@{/reservations/confirm}" method="post">
+
+        <input type="hidden"
+               name="eventId"
+               th:value="${eventId}">
+
+        <input type="hidden"
+               name="seatIds"
+               th:value="${#strings.listJoin(seatIds, ',')}">
+
+        <div class="d-flex justify-content-between mt-4">
+
+            <a href="/"
+               class="btn btn-secondary">
+                Cancel
+            </a>
+
+            <button type="submit"
+                    class="btn btn-custom">
+
+                Confirm Reservation
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

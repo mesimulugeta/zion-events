@@ -1,0 +1,141 @@
+:root {
+  /* Surfaces */
+  --bg-color:     #F5F7FA;
+  --text-color:   #172033;
+  --muted-color:  #64748B;
+  --card-bg:      #FFFFFF;
+  --card-bg-alt:  #EEF2F7;
+  --border-color: #E3E8EF;
+  --input-bg:     #FFFFFF;
+  --navbar-bg:    #171A1D;
+
+  /* Brand */
+  --accent:          #FF686B;
+  --accent-2:        #FF9B71;
+  --accent-dark:     #D63C47;
+  --accent-soft:     rgba(255, 104, 107, 0.12);
+  --accent-gradient: linear-gradient(135deg, #FF686B, #FF9B71);
+
+  /* Status */
+  --success: #16A34A;
+  --warning: #F59E0B;
+  --danger:  #DC3545;
+
+  --shadow: 0 25px 60px -12px rgba(23, 32, 51, 0.18);
+}
+
+html.dark-theme,
+body.dark-theme {
+  --bg-color:     #0F1215;
+  --text-color:   #F1F3F5;
+  --muted-color:  #9AA5B1;
+  --card-bg:      #1A1E23;
+  --card-bg-alt:  #151A1F;
+  --border-color: #2B323A;
+  --input-bg:     #232A31;
+  --navbar-bg:    #171A1D;
+
+  --accent-dark:  #FF8A8C;
+  --accent-soft:  rgba(255, 104, 107, 0.18);
+
+  --shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.6);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+body {
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent-dark);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+/* Form focus uses the brand color */
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Dark mode for Bootstrap inputs */
+html.dark-theme input,
+body.dark-theme input,
+html.dark-theme select,
+body.dark-theme select,
+html.dark-theme textarea,
+body.dark-theme textarea {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Reusable buttons */
+.btn-accent {
+  background: var(--accent-gradient);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.2s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 16px rgba(255, 104, 107, 0.28);
+}
+.btn-accent:hover:not(:disabled) {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+.btn-accent:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Navbar buttons  */
+.nav-btn {
+  padding: 0.38rem 1rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: background 0.2s, border-color 0.2s;
+}
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.nav-btn-primary {
+  background: var(--accent-gradient);
+  border-color: transparent;
+  font-weight: 600;
+}
+.nav-btn-primary:hover {
+  background: var(--accent-gradient);
+  border-color: transparent;
+  filter: brightness(1.07);
+}

@@ -1,0 +1,19 @@
+# Backend (Java / NetBeans)
+target/
+nbproject/private/
+nbbuild/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+*.log
+
+# Frontend (Node)
+node_modules/
+dist/
+
+# Secrets and editor files
+.env
+.env.*
+.idea/
+*.iml
+.vscode/

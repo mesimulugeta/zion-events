@@ -1,0 +1,77 @@
+html:root {
+  --bg-color:     #F5F7FA;
+  --text-color:   #172033;
+  --muted-color:  #64748B;
+  --card-bg:      #FFFFFF;
+  --card-bg-alt:  #EEF2F7;
+  --border-color: #E3E8EF;
+  --input-bg:     #FFFFFF;
+  --navbar-bg:    #171A1D;
+
+  --accent:          #FF686B;
+  --accent-2:        #FF9B71;
+  --accent-dark:     #D63C47;
+  --accent-soft:     rgba(255, 104, 107, 0.12);
+  --accent-gradient: linear-gradient(135deg, #FF686B, #FF9B71);
+
+  --success: #16A34A;
+  --warning: #F59E0B;
+  --danger:  #DC3545;
+
+  --shadow: 0 25px 60px -12px rgba(23, 32, 51, 0.18);
+}
+
+html.dark-theme:root,
+html.dark-theme body.dark-theme {
+  --bg-color:     #0F1215;
+  --text-color:   #F1F3F5;
+  --muted-color:  #9AA5B1;
+  --card-bg:      #1A1E23;
+  --card-bg-alt:  #151A1F;
+  --border-color: #2B323A;
+  --input-bg:     #232A31;
+  --navbar-bg:    #171A1D;
+
+  --accent-dark:  #FF8A8C;
+  --accent-soft:  rgba(255, 104, 107, 0.18);
+  --shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.6);
+}
+
+body {
+  font-family: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent-dark); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+::selection { background: var(--accent-soft); }
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+html.dark-theme input,
+html.dark-theme select,
+html.dark-theme textarea {
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, #FF686B, #FF9B71);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.2s, transform 0.2s;
+  box-shadow: 0 6px 16px rgba(255, 104, 107, 0.28);
+}
+.btn-accent:hover:not(:disabled) { filter: brightness(1.05); transform: translateY(-1px); }
+.btn-accent:disabled { opacity: 0.6; cursor: not-allowed; }

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Gateway to Memorable Events</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 0; padding: 0;
+            background-color: #e6f7f9;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+        }
+        .navbar {
+            background-color: #0097a7;
+            height: 70px;
+            width: 100%;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand { font-weight: 700; font-size: 1.3rem; color: #fff !important; text-decoration: none; }
+        .btn-custom {
+            background: linear-gradient(135deg, #00acc1, #007c8a);
+            color: #fff; border-radius: 20px; padding: 7px 18px; border: none;
+        }
+        .btn-custom:hover { color: #fff; opacity: 0.9; }
+        .btn-outline-nav {
+            border: 2px solid #fff; color: #fff;
+            border-radius: 20px; padding: 6px 18px; background: transparent;
+        }
+        .btn-outline-nav:hover { background: rgba(255,255,255,0.15); color: #fff; }
+        .hero {
+            background: linear-gradient(135deg, #0097a7, #00acc1);
+            color: white; padding: 60px 0; text-align: center;
+            border-radius: 0 0 30px 30px; margin-bottom: 30px;
+        }
+        .main-content { padding: 20px; }
+        .event-container {
+            background-color: #ffffff; border-radius: 12px;
+            padding: 30px; margin: 30px auto; max-width: 800px;
+        }
+        .event-card { border-bottom: 1px solid #eee; padding: 20px 0; }
+        .event-card:last-child { border-bottom: none; }
+        .event-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+        .event-meta { color: #555; margin-bottom: 6px; line-height: 1.8; }
+        .badge-active    { background: #d4edda; color: #155724; padding: 3px 10px; border-radius: 20px; font-size: .75rem; font-weight: 600; }
+        .badge-cancelled { background: #f8d7da; color: #721c24; padding: 3px 10px; border-radius: 20px; font-size: .75rem; font-weight: 600; }
+        .badge-closed    { background: #e2e3e5; color: #383d41; padding: 3px 10px; border-radius: 20px; font-size: .75rem; font-weight: 600; }
+        .guest-prompt {
+            background-color: #ffffff; border-radius: 12px;
+            padding: 40px; margin: 30px auto; max-width: 600px; text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid p-0">
+        <a class="navbar-brand" href="/">🎟 Gateway to Memorable Events</a>
+
+        <div class="ms-auto d-flex align-items-center gap-2">
+
+            <!-- LOGGED IN -->
+            <div th:if="${currentUser != null}" class="d-flex align-items-center gap-2">
+
+                <span class="text-white me-1">
+                    Hello, <strong th:text="${currentUser}"></strong>
+                </span>
+
+                <!-- USER gets Search Events -->
+                <div th:if="${#authorization.expression('hasRole(''USER'')')}">
+                    <a href="/events/search" class="btn btn-custom">Search Events</a>
+                    <a href="/reservations/my" class="btn btn-outline-nav">My Reservations</a>
+                </div>
+
+                <!-- ADMIN gets All Reservations only -->
+                <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                    <a href="/admin/reservations" class="btn btn-outline-nav">All Reservations</a>
+                </div>
+
+                <!-- LOGOUT (both) -->
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <input type="hidden"
+                           th:if="${_csrf != null}"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}" />
+                    <button type="submit" class="btn btn-outline-nav">Logout</button>
+                </form>
+
+            </div>
+
+            <!-- GUEST -->
+            <div th:if="${currentUser == null}">
+                <a href="/login" class="btn btn-outline-nav me-1">Login</a>
+                <a href="/register" class="btn btn-custom">Register</a>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<!-- HERO (guests only) -->
+<div class="hero" th:if="${currentUser == null}">
+    <div class="container">
+        <h1>Experience Unforgettable Moments</h1>
+        <p>Discover, book, and cherish the best events in Ethiopia.</p>
+    </div>
+</div>
+
+<!-- EVENTS LIST -->
+<div th:if="${currentUser != null}" class="main-content">
+    <div class="event-container">
+
+        <div th:if="${#lists.isEmpty(events)}" class="text-muted text-center py-4">
+            No events available.
+        </div>
+
+        <div th:each="event : ${events}" class="event-card">
+
+            <div class="d-flex justify-content-between align-items-start">
+                <h5 class="mb-1" th:text="${event.title}"></h5>
+                <span th:class="${'badge-' + #strings.toLowerCase(event.status)}"
+                      th:text="${event.status}"></span>
+            </div>
+
+            <div class="event-meta mt-2">
+                📅 <span th:text="${#temporals.format(event.startAt, 'MMM d, yyyy HH:mm')}"></span>
+                → <span th:text="${#temporals.format(event.endAt, 'MMM d, yyyy HH:mm')}"></span>
+                <br>
+                🪑 <span th:text="${event.availableSeats}"></span> seats available
+            </div>
+
+            <div class="event-actions">
+
+                <!-- USER: Reserve -->
+                <div th:if="${#authorization.expression('hasRole(''USER'')')}">
+                    <a th:href="@{/events/{id}/seats(id=${event.id})}"
+                       class="btn btn-custom btn-sm">Reserve</a>
+                </div>
+
+                <!-- ADMIN: Edit + Cancel -->
+                <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+                     class="d-flex gap-2">
+                    <a th:href="@{/admin/events/{id}/edit(id=${event.id})}"
+                       class="btn btn-outline-secondary btn-sm">Edit</a>
+                    <form th:action="@{/admin/events/{id}/cancel(id=${event.id})}"
+                          method="post" class="d-inline"
+                          onsubmit="return confirm('Cancel this event?')">
+                        <button type="submit" class="btn btn-outline-danger btn-sm"
+                                th:disabled="${event.status == 'CANCELLED'}">
+                            Cancel
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- GUEST PROMPT -->
+<div th:if="${currentUser == null}" class="guest-prompt">
+    <h3>Welcome</h3>
+    <p>Please login or register to browse events.</p>
+    <a href="/login" class="btn btn-custom me-2">Login</a>
+    <a href="/register" class="btn btn-outline-secondary">Register</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
